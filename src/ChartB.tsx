@@ -45,7 +45,7 @@ export class ChartB extends React.Component<IPlotProps>{
         .onClick(this.barDoubleClickHandler);
 
 
-    private barDoubleClickHandler(this, p) {
+    private barDoubleClickHandler(p) {
         console.log("Clicked")
         console.log(p)
         console.log(this)
