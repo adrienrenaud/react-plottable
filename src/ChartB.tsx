@@ -18,37 +18,63 @@ export interface IPlotProps {
 }
 
 export class ChartB extends React.Component<IPlotProps>{
+    constructor(props) {
+        super(props);
+        this.updatePlotData = this.updatePlotData.bind(this);
+        this.redrawPlot = this.redrawPlot.bind(this);
+        this.barDoubleClickHandler = this.barDoubleClickHandler.bind(this);
+      }
+
     private el: HTMLDivElement = document.createElement('div');
 
-    private clearElementBeforeUpdate(el: HTMLDivElement) {
-        el.innerHTML = '';
+    private xScale = new Plottable.Scales.Linear();
+    private yScale = new Plottable.Scales.Linear();
+    private xAxis = new Plottable.Axes.Numeric(this.xScale, "bottom");
+    private yAxis = new Plottable.Axes.Numeric(this.yScale, "left");
+    private plot = new Plottable.Plots.Bar()
+        .x((d: BarChartData) => d.x, this.xScale)
+        .y((d: BarChartData) => d.y, this.yScale)
+    private chart = new Plottable.Components.Table([
+        [this.yAxis, this.plot],
+        [null, this.xAxis]
+    ]);
+
+
+    private barDoubleClick = new Plottable.Interactions.Click()
+        .attachTo(this.plot)
+        .onClick(this.barDoubleClickHandler);
+
+
+    private barDoubleClickHandler(this, p) {
+        console.log("Clicked")
+        console.log(p)
+        console.log(this)
+        if (this.plot.entitiesAt(p)[0] !== undefined) {
+            const selectedPoint = this.plot.entitiesAt(p)[0]
+            console.log(selectedPoint)
+        }
+    }
+
+    private updatePlotData() {
+        this.plot.datasets([new Plottable.Dataset(this.props.data)]);
+    }
+    private redrawPlot() {
+        this.plot.redraw();
     }
 
     private drawChartToElement(el: HTMLDivElement) {
-        const xScale = new Plottable.Scales.Linear();
-        const yScale = new Plottable.Scales.Linear();
-        var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
-        var yAxis = new Plottable.Axes.Numeric(yScale, "left");
-
-        const plot = new Plottable.Plots.Bar()
-            .addDataset(new Plottable.Dataset(this.props.data))
-            .x((d: BarChartData) => d.x, xScale)
-            .y((d: BarChartData) => d.y, yScale)
-            // .animated(true) // FIXME: crashes "d3.transition is not a function"
-
-        var chart = new Plottable.Components.Table([
-            [yAxis, plot],
-            [null, xAxis]
-        ]);
-        chart.renderTo(el);
+        this.chart.renderTo(el);
     }
 
     async componentDidUpdate() {
-        this.clearElementBeforeUpdate(this.el);
-        this.drawChartToElement(this.el)
+        this.updatePlotData();
+        this.redrawPlot();
     }
     async componentDidMount() {
-        this.drawChartToElement(this.el)
+        this.drawChartToElement(this.el);
+        this.updatePlotData();
+        this.redrawPlot();
+        window.addEventListener("resize", this.redrawPlot);
     }
 
     public render() {
@@ -56,7 +82,7 @@ export class ChartB extends React.Component<IPlotProps>{
             <div>
                 <div
                     ref={el => (el ? (this.el = el) : null)}
-                    style={{ height: '180px', width: '300px'}}
+                    style={{ height: '180px', width: '100%'}}
                 />
             </div>
         );
