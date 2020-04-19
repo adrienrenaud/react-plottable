@@ -39,31 +39,24 @@ export class ChartB extends React.Component<IPlotProps>{
         [null, this.xAxis]
     ]);
 
-
     private barDoubleClick = new Plottable.Interactions.Click()
         .attachTo(this.plot)
-        .onClick(this.barDoubleClickHandler);
+        .onDoubleClick((p) => this.barDoubleClickHandler(p));
 
-
-    private barDoubleClickHandler(p) {
-        console.log("Clicked")
-        console.log(p)
-        console.log(this)
-        if (this.plot.entitiesAt(p)[0] !== undefined) {
-            const selectedPoint = this.plot.entitiesAt(p)[0]
-            console.log(selectedPoint)
-        }
+    private drawChartToElement(el: HTMLDivElement) {
+        this.chart.renderTo(el);
     }
-
     private updatePlotData() {
         this.plot.datasets([new Plottable.Dataset(this.props.data)]);
     }
     private redrawPlot() {
         this.plot.redraw();
     }
-
-    private drawChartToElement(el: HTMLDivElement) {
-        this.chart.renderTo(el);
+    private barDoubleClickHandler(p) {
+        if (this.plot.entitiesAt(p)[0] !== undefined) {
+            const selectedPoint = this.plot.entitiesAt(p)[0]
+            console.log(selectedPoint.datum)
+        }
     }
 
     async componentDidUpdate() {
