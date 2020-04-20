@@ -1,18 +1,12 @@
 import "./App.css";
 
-import { ChartB } from "./ChartB";
-import React from "react";
+import { BarChart, BarChartData } from "./BarChart";
 
-export type BarChartData = {
-  x: number;
-  y: number;
-  label?: string;
-}
+import React from "react";
 
 export interface Data {
   data: BarChartData[];
 }
-
 
 export class App extends React.Component<{}, Data> {
   constructor(props) {
@@ -51,10 +45,10 @@ export class App extends React.Component<{}, Data> {
   public render() {
     return (
       <div className="App">
-        <ChartB data={this.state.data} />
+        <BarChart data={this.state.data} />
         <div>
-        <button onClick={this.handleAddClick}> Add data </button>
-        <button onClick={this.handleRemoveClick}> Remove data </button>
+          <button onClick={this.handleAddClick}> Add data </button>
+          <button onClick={this.handleRemoveClick}> Remove data </button>
         </div>
       </div>
     );
