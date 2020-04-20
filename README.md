@@ -1,3 +1,17 @@
+# Example of using Plottable.js with React
+
+Have a look at `App.tsx` and `BarChart.tsx` for a working example with:
+- bar chart
+- data update
+- data selection
+
+![](./plot-screenshot.png)
+
+To do:
+- add tooltip
+
+-----
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
