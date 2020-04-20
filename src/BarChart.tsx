@@ -25,7 +25,7 @@ export class BarChart extends React.Component<IPlotProps> {
     this.barDoubleClickHandler = this.barDoubleClickHandler.bind(this);
   }
 
-  private el: HTMLDivElement = document.createElement("div");
+  private plotDivRef = React.createRef<HTMLDivElement>();
 
   private xScale = new Plottable.Scales.Linear();
   private yScale = new Plottable.Scales.Linear();
@@ -64,17 +64,19 @@ export class BarChart extends React.Component<IPlotProps> {
     this.redrawPlot();
   }
   async componentDidMount() {
-    this.drawChartToElement(this.el);
-    this.updatePlotData();
-    this.redrawPlot();
-    window.addEventListener("resize", () => this.redrawPlot());
+    if (this.plotDivRef.current) {
+      this.drawChartToElement(this.plotDivRef.current);
+      this.updatePlotData();
+      this.redrawPlot();
+      window.addEventListener("resize", () => this.redrawPlot());
+    }
   }
 
   public render() {
     return (
       <div>
         <div
-          ref={(el) => (el ? (this.el = el) : null)}
+          ref={this.plotDivRef}
           style={{ height: "180px", width: "100%" }}
         />
       </div>
