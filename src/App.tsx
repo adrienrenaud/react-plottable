@@ -4,11 +4,11 @@ import { BarChart, BarChartData } from "./BarChart";
 
 import React from "react";
 
-export interface Data {
+export interface IAppSate {
   data: BarChartData[];
 }
 
-export class App extends React.Component<{}, Data> {
+export class App extends React.Component<{}, IAppSate> {
   constructor(props) {
     super(props);
     this.state = {
