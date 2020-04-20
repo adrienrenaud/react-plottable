@@ -4,6 +4,7 @@ Have a look at `App.tsx` and `BarChart.tsx` for a working example with:
 - bar chart
 - data update
 - data selection
+- responsive chart
 
 ![](./plot-screenshot.png)
 
